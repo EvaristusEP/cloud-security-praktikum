@@ -55,7 +55,7 @@ Hasil:
 
 Docker berhasil menjalankan container dan menampilkan pesan `Hello from Docker!`.
 
-**Bukti Screenshot 1 — Pengujian Docker**
+** Pengujian Docker**
 
 ![Docker Hello World](screenshots/docker-hello-world.png)
 
@@ -77,7 +77,7 @@ Image MinIO berhasil dijalankan dan menampilkan informasi versi:
 
 Catatan: Pada proses setup awal, pengunduhan image dari Quay sempat mengalami respons `401 UNAUTHORIZED`. Namun, image yang sudah tersedia secara lokal berhasil dijalankan dan diverifikasi.
 
-**Bukti Screenshot 2 — Verifikasi MinIO**
+**  Verifikasi MinIO**
 
 ![MinIO Version](screenshots/minio-version.png)
 
@@ -104,7 +104,7 @@ Setelah proses pengunduhan selesai, image diperiksa menggunakan:
 docker images
 ```
 
-**Bukti Screenshot 3 — Daftar Image Docker**
+**  Daftar Image Docker**
 
 ![Docker Images](screenshots/docker-images-setup-rumah.png)
 
@@ -158,7 +158,7 @@ Ketiga image Wazuh berhasil diunduh:
 - `wazuh/wazuh-manager:4.14.11`
 - `wazuh/wazuh-dashboard:4.14.11`
 
-**Bukti Screenshot 4 — Proses Pull Image Wazuh**
+**  Proses Pull Image Wazuh**
 
 ![Wazuh Pull](screenshots/wazuh-compose-pull.png)
 
@@ -172,7 +172,7 @@ docker images | grep -E 'minio|keycloak|vault|trivy|kindest|kube-bench|prowler|w
 
 Hasil menunjukkan bahwa image yang dibutuhkan telah tersedia secara lokal, termasuk seluruh komponen Wazuh.
 
-**Bukti Screenshot 5 — Verifikasi Akhir Image**
+**  Verifikasi Akhir Image**
 
 ![Verifikasi Image](screenshots/docker-images-verification.png)
 
@@ -244,9 +244,73 @@ Jika menggunakan SaaS, tanggung jawab provider menjadi lebih besar karena provid
 
 Salah satu contohnya adalah penyimpanan cloud yang dikonfigurasi secara publik sehingga file sensitif dapat diakses oleh pihak yang tidak berwenang. Hal tersebut dapat terjadi ketika pengguna menganggap provider bertanggung jawab sepenuhnya atas keamanan data, padahal pengaturan akses dan konfigurasi penyimpanan tetap menjadi tanggung jawab pengguna.
 
-**Bukti Screenshot 6 — Worksheet Shared Responsibility**
+## 5. Worksheet Shared Responsibility Model
 
-![Worksheet Shared Responsibility](screenshots/worksheet-shared-responsibility.png)
+### Studi Kasus TokoNusa
+
+TokoNusa berencana menggunakan dua layanan cloud pada tahap awal migrasi, yaitu:
+
+1. Object Storage untuk menyimpan foto produk.
+2. Managed Database untuk menyimpan data transaksi.
+
+### A. Tabel Pembagian Tanggung Jawab
+
+| Aspek | Penyimpanan Foto Produk | Database Transaksi |
+|---|---|---|
+| Keamanan fisik pusat data | Provider | Provider |
+| Infrastruktur jaringan dasar | Provider | Provider |
+| Hypervisor / virtualisasi | Provider | Provider |
+| Patching sistem operasi | Provider | Provider |
+| Konfigurasi aplikasi/layanan | Pengguna | Bersama |
+| Enkripsi data | Bersama | Bersama |
+| Manajemen akses (IAM) | Bersama | Bersama |
+| Klasifikasi data | Pengguna | Pengguna |
+
+### B. Catatan dan Justifikasi
+
+**1. Keamanan fisik pusat data**
+
+Provider bertanggung jawab atas keamanan fisik pusat data, termasuk pengelolaan gedung, listrik, pendingin ruangan, dan perlindungan fasilitas server.
+
+**2. Infrastruktur jaringan dasar**
+
+Provider bertanggung jawab atas pengelolaan infrastruktur jaringan dasar, termasuk perangkat jaringan fisik dan konektivitas pusat data.
+
+**3. Hypervisor / virtualisasi**
+
+Provider bertanggung jawab atas pengelolaan hypervisor dan infrastruktur virtualisasi yang digunakan untuk menjalankan layanan cloud.
+
+**4. Patching sistem operasi**
+
+Provider bertanggung jawab atas pemeliharaan sistem operasi dan patch keamanan pada infrastruktur layanan terkelola.
+
+**5. Konfigurasi aplikasi/layanan**
+
+Pada object storage, pengguna bertanggung jawab mengatur bucket, akses, dan konfigurasi penyimpanan.
+
+Pada managed database, tanggung jawab terbagi. Provider mengelola platform database dan komponen layanan terkelola, sedangkan pengguna mengatur database, skema, serta konfigurasi sesuai kebutuhan aplikasi.
+
+**6. Enkripsi data**
+
+Provider menyediakan kemampuan dan infrastruktur enkripsi. Pengguna bertanggung jawab menentukan kebijakan enkripsi serta mengelola kunci dan pengaturan enkripsi sesuai layanan yang digunakan.
+
+**7. Manajemen akses (IAM)**
+
+Provider menyediakan fasilitas IAM, sedangkan pengguna mengatur akun, role, permission, dan kebijakan akses agar hanya pihak yang berwenang dapat menggunakan layanan.
+
+**8. Klasifikasi data**
+
+Pengguna bertanggung jawab menentukan klasifikasi data berdasarkan tingkat sensitivitasnya, misalnya data publik, internal, dan rahasia.
+
+### C. Pertanyaan Refleksi
+
+**1. Jika TokoNusa menggunakan layanan SaaS siap pakai, bukan menyusun sendiri dari storage dan database terpisah, baris mana yang akan berubah jawabannya?**
+
+Jika menggunakan SaaS, tanggung jawab provider menjadi lebih besar karena provider juga mengelola aplikasi dan infrastruktur pendukungnya. Pengguna tetap bertanggung jawab terhadap pengelolaan akun, hak akses, data, serta konfigurasi yang disediakan oleh aplikasi.
+
+**2. Sebutkan satu contoh nyata ketika kesalahan asumsi Shared Responsibility menyebabkan masalah keamanan.**
+
+Salah satu contohnya adalah penyimpanan cloud yang dikonfigurasi secara publik sehingga file sensitif dapat diakses oleh pihak yang tidak berwenang. Hal tersebut dapat terjadi ketika pengguna menganggap provider bertanggung jawab sepenuhnya atas keamanan data, padahal pengaturan akses dan konfigurasi penyimpanan tetap menjadi tanggung jawab pengguna.
 
 ## 6. Kendala dan Solusi
 
