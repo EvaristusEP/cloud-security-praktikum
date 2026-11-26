@@ -55,7 +55,7 @@ Hasil:
 
 Docker berhasil menjalankan container dan menampilkan pesan `Hello from Docker!`.
 
-** Pengujian Docker**
+  **Pengujian Docker**
 
 ![Docker Hello World](screenshots/docker-hello-world.png)
 
@@ -77,7 +77,7 @@ Image MinIO berhasil dijalankan dan menampilkan informasi versi:
 
 Catatan: Pada proses setup awal, pengunduhan image dari Quay sempat mengalami respons `401 UNAUTHORIZED`. Namun, image yang sudah tersedia secara lokal berhasil dijalankan dan diverifikasi.
 
-**  Verifikasi MinIO**
+  **Verifikasi MinIO**
 
 ![MinIO Version](screenshots/minio-version.png)
 
@@ -104,7 +104,7 @@ Setelah proses pengunduhan selesai, image diperiksa menggunakan:
 docker images
 ```
 
-**  Daftar Image Docker**
+  **Daftar Image Docker**
 
 ![Docker Images](screenshots/docker-images-setup-rumah.png)
 
@@ -158,7 +158,7 @@ Ketiga image Wazuh berhasil diunduh:
 - `wazuh/wazuh-manager:4.14.11`
 - `wazuh/wazuh-dashboard:4.14.11`
 
-**  Proses Pull Image Wazuh**
+  **Proses Pull Image Wazuh**
 
 ![Wazuh Pull](screenshots/wazuh-compose-pull.png)
 
@@ -172,7 +172,7 @@ docker images | grep -E 'minio|keycloak|vault|trivy|kindest|kube-bench|prowler|w
 
 Hasil menunjukkan bahwa image yang dibutuhkan telah tersedia secara lokal, termasuk seluruh komponen Wazuh.
 
-**  Verifikasi Akhir Image**
+  **Verifikasi Akhir Image**
 
 ![Verifikasi Image](screenshots/docker-images-verification.png)
 
