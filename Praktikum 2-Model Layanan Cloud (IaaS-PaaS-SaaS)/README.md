@@ -28,6 +28,10 @@ docker ps
 
 Container `minio-tokonusa` berhasil berjalan dengan status `Up`.
 
+**MinIO Container Running**
+
+![MinIO Container Running](screenshots/minio-container-running.png)
+
 ### 3. Mengakses MinIO Console
 
 MinIO Console dapat diakses melalui browser Windows pada alamat:
@@ -41,15 +45,15 @@ Login menggunakan kredensial praktikum:
 - Username: `admin`
 - Password: `admin12345`
 
-**MinIO Console**
+**MinIO Console Login**
 
-![MinIO Console](screenshots/minio-console-login.png)
+![MinIO Console Login](screenshots/minio-console-login.png)
 
 ### 4. Memasang MinIO Client (mc)
 
 MinIO Client digunakan untuk mengelola bucket dan objek melalui terminal.
 
-MinIO Client diunduh menggunakan perintah:
+Mengunduh MinIO Client:
 
 ```bash
 mkdir -p ~/minio-binaries
@@ -78,6 +82,10 @@ Versi MinIO Client yang digunakan:
 RELEASE.2025-08-13T08-35-41Z
 ```
 
+**MinIO Client Installation**
+
+![MinIO Client Installation](screenshots/minio-client-installation.png)
+
 ### 5. Menghubungkan MinIO Client ke Server
 
 Mendaftarkan server MinIO menggunakan alias `local`:
@@ -104,9 +112,13 @@ mc ls local
 
 Bucket `tokonusa-produk` berhasil dibuat.
 
+**MinIO Bucket Created**
+
+![MinIO Bucket Created](screenshots/minio-bucket-created.png)
+
 ### 7. Membuat dan Mengunggah File
 
-Membuat file contoh:
+Membuat file contoh sesuai tutorial:
 
 ```bash
 echo "contoh foto produk TokoNusa" > produk-dummy.jpg
@@ -128,6 +140,10 @@ File berhasil diunggah ke bucket MinIO.
 
 File `produk-dummy.jpg` merupakan file teks biasa sesuai instruksi tutorial. Untuk pengujian tampilan gambar di browser, dibuat file SVG tambahan bernama `produk-dummy.svg`.
 
+**MinIO Object Upload**
+
+![MinIO Object Upload](screenshots/minio-file-upload.png)
+
 ### 8. Mengatur Akses Publik
 
 Mengatur agar objek di dalam folder `public` dapat diakses tanpa login:
@@ -137,6 +153,10 @@ mc anonymous set download local/tokonusa-produk/public
 ```
 
 Pengaturan akses publik berhasil diterapkan pada folder `public`.
+
+**MinIO Public Access Configuration**
+
+![MinIO Public Access Configuration](screenshots/minio-public-access.png)
 
 ### 9. Menguji Akses Publik
 
@@ -150,9 +170,9 @@ http://localhost:9000/tokonusa-produk/public/produk-dummy.svg
 
 Gambar berhasil ditampilkan tanpa meminta autentikasi. Hal ini membuktikan bahwa objek dapat diakses secara publik.
 
-**Pengujian Akses Publik melalui Browser**
+**MinIO Public Access Verification**
 
-![MinIO Public Browser](screenshots/minio-public-browser.png)
+![MinIO Public Access Verification](screenshots/minio-public-browser.png)
 
 ---
 
