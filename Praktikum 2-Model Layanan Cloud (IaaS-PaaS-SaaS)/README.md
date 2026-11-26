@@ -28,8 +28,6 @@ docker ps
 
 Container `minio-tokonusa` berhasil berjalan dengan status `Up`.
 
-**Bukti:** `screenshots/minio-container-running.png`
-
 ### 3. Mengakses MinIO Console
 
 MinIO Console dapat diakses melalui browser Windows pada alamat:
@@ -43,19 +41,38 @@ Login menggunakan kredensial praktikum:
 - Username: `admin`
 - Password: `admin12345`
 
-**Bukti:** `screenshots/minio-console-login.png`
+**MinIO Console**
+
+![MinIO Console](screenshots/minio-console-login.png)
 
 ### 4. Memasang MinIO Client (mc)
 
 MinIO Client digunakan untuk mengelola bucket dan objek melalui terminal.
 
-MinIO Client berhasil dipasang dan diverifikasi menggunakan:
+MinIO Client diunduh menggunakan perintah:
+
+```bash
+mkdir -p ~/minio-binaries
+
+curl -fL \
+  "https://github.com/minio/mc/releases/download/RELEASE.2025-08-13T08-35-41Z/mc.linux-amd64.RELEASE.2025-08-13T08-35-41Z" \
+  -o ~/minio-binaries/mc
+```
+
+Memberikan izin eksekusi dan menambahkan ke PATH:
+
+```bash
+chmod +x ~/minio-binaries/mc
+export PATH="$HOME/minio-binaries:$PATH"
+```
+
+Memeriksa instalasi:
 
 ```bash
 mc --version
 ```
 
-Versi yang digunakan:
+Versi MinIO Client yang digunakan:
 
 ```text
 RELEASE.2025-08-13T08-35-41Z
@@ -69,11 +86,7 @@ Mendaftarkan server MinIO menggunakan alias `local`:
 mc alias set local http://localhost:9000 admin admin12345
 ```
 
-Hasil:
-
-```text
-Added `local` successfully.
-```
+MinIO Client berhasil terhubung dengan server MinIO.
 
 ### 6. Membuat Bucket TokoNusa
 
@@ -90,8 +103,6 @@ mc ls local
 ```
 
 Bucket `tokonusa-produk` berhasil dibuat.
-
-**Bukti:** `screenshots/minio-bucket-created.png`
 
 ### 7. Membuat dan Mengunggah File
 
@@ -115,7 +126,7 @@ mc ls local/tokonusa-produk/public/
 
 File berhasil diunggah ke bucket MinIO.
 
-**Catatan:** File `produk-dummy.jpg` merupakan file teks biasa sesuai instruksi tutorial. Untuk pengujian tampilan gambar di browser, dibuat file SVG tambahan bernama `produk-dummy.svg`.
+File `produk-dummy.jpg` merupakan file teks biasa sesuai instruksi tutorial. Untuk pengujian tampilan gambar di browser, dibuat file SVG tambahan bernama `produk-dummy.svg`.
 
 ### 8. Mengatur Akses Publik
 
@@ -125,13 +136,7 @@ Mengatur agar objek di dalam folder `public` dapat diakses tanpa login:
 mc anonymous set download local/tokonusa-produk/public
 ```
 
-Hasil:
-
-```text
-Access permission for `local/tokonusa-produk/public` is set to `download`
-```
-
-**Bukti:** `screenshots/minio-public-access.png`
+Pengaturan akses publik berhasil diterapkan pada folder `public`.
 
 ### 9. Menguji Akses Publik
 
@@ -145,7 +150,9 @@ http://localhost:9000/tokonusa-produk/public/produk-dummy.svg
 
 Gambar berhasil ditampilkan tanpa meminta autentikasi. Hal ini membuktikan bahwa objek dapat diakses secara publik.
 
-**Bukti:** `screenshots/minio-public-browser.png`
+**Pengujian Akses Publik melalui Browser**
+
+![MinIO Public Browser](screenshots/minio-public-browser.png)
 
 ---
 
@@ -174,17 +181,19 @@ Terdapat perbedaan tanggung jawab antara layanan Penyimpanan Foto Produk pada wo
 
 ---
 
-## C. Dokumentasi Screenshot
+## C. Bahan Renungan
 
-Seluruh bukti praktikum disimpan dalam folder `screenshots/`.
+### 1. Risiko Pengaturan Akses Publik
 
-| No. | Nama Screenshot | Keterangan |
-|---|---|---|
-| 1 | `minio-container-running.png` | Container MinIO berhasil berjalan |
-| 2 | `minio-console-login.png` | MinIO Console berhasil diakses |
-| 3 | `minio-bucket-created.png` | Bucket TokoNusa berhasil dibuat |
-| 4 | `minio-public-access.png` | Pengaturan akses publik berhasil |
-| 5 | `minio-public-browser.png` | File berhasil diakses melalui browser Incognito |
+Jika perintah `mc anonymous set download` tidak dijalankan, bucket atau folder tidak otomatis menjadi publik. Secara default, objek tetap memerlukan autentikasi sesuai kebijakan akses yang berlaku.
+
+Apabila developer TokoNusa lupa mengatur akses untuk data yang seharusnya rahasia, risiko kebocoran dapat terjadi jika kebijakan akses publik diterapkan secara tidak tepat. Oleh karena itu, pengaturan hak akses harus disesuaikan dengan klasifikasi dan kebutuhan keamanan data.
+
+### 2. Perbandingan MinIO dengan SaaS
+
+Penggunaan MinIO secara mandiri membutuhkan konfigurasi dan pengelolaan lebih banyak, mulai dari menjalankan server, memasang MinIO Client, membuat bucket, mengunggah objek, hingga mengatur kebijakan akses.
+
+Jika menggunakan layanan SaaS siap pakai, pengguna tidak perlu mengelola server, sistem operasi, instalasi aplikasi, dan pembaruan infrastruktur secara langsung. Pengguna dapat lebih berfokus pada penggunaan layanan dan pengelolaan data, meskipun konfigurasi akses dan klasifikasi data tetap menjadi tanggung jawab pengguna.
 
 ---
 
@@ -194,4 +203,4 @@ Pada praktikum ini, MinIO berhasil dijalankan menggunakan Docker Desktop dan dik
 
 Bucket `tokonusa-produk` berhasil dibuat, file contoh berhasil diunggah, dan akses publik pada folder `public` berhasil dikonfigurasi. Pengujian melalui browser Incognito membuktikan bahwa objek dapat diakses tanpa login.
 
-Praktikum ini juga memberikan pemahaman bahwa penggunaan layanan yang dikelola secara mandiri membutuhkan tanggung jawab lebih besar dari sisi pengguna, terutama dalam pengelolaan konfigurasi layanan, keamanan, dan kontrol akses data.
+Praktikum ini memberikan pemahaman mengenai penggunaan Object Storage serta pentingnya Shared Responsibility Model, khususnya dalam pengelolaan konfigurasi layanan, keamanan, dan kontrol akses data.
